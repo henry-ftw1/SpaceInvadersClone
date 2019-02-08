@@ -1,21 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyMovement : MonoBehaviour
 {
     public float moveSpeed;
-    private bool moveRight;
+    public float moveDown;
+    public bool moveRight;
+
+    public delegate void hitWallDelegate();
+    public event hitWallDelegate hitWallEvent = delegate { };
+
 
     // Start is called before the first frame update
     private void Awake()
     {
-        moveSpeed = 0.5f;
+        moveSpeed = 10f;
+        moveDown = 0.1f;
         moveRight = true;
     }
     void Start()
     {
-        //Move();
     }
 
     // Update is called once per frame
@@ -27,18 +33,26 @@ public class EnemyMovement : MonoBehaviour
     void Move()
     {
         if (moveRight)
-            this.transform.Translate(Vector3.right * Time.deltaTime * moveSpeed);
+        {
+            this.transform.Translate(Vector2.right * Time.deltaTime * moveSpeed);
+        }
+            
         else
-            this.transform.Translate(Vector3.left * Time.deltaTime * moveSpeed);
+        {
+            this.transform.Translate(Vector2.left * Time.deltaTime * moveSpeed);
+        }
     }
+
+
 
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.collider.CompareTag("Wall"))
         {
-            Debug.Log("Hit Collider");
-            moveRight = !moveRight;
-            //Move();
+            //this.transform.Translate(Vector2.down * moveDown);
+            hitWallEvent();
+            //Debug.Log("Hit Collider");
+            //moveRight = !moveRight;
         }
     }
 }
