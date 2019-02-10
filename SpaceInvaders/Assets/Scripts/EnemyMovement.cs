@@ -19,7 +19,7 @@ public class EnemyMovement : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        moveSpeed = 10f;
+        moveSpeed = 5f;
         moveDown = 0.1f;
         moveRight = true;
         m_rb = this.transform.GetComponent<Rigidbody2D>();
@@ -63,11 +63,20 @@ public class EnemyMovement : MonoBehaviour
         if (other.collider.CompareTag("Wall"))
         {
             this.transform.Translate(Vector2.down * moveDown);
-            hitWallEvent();
+            OnHitWallEvent();
             //Debug.Log("Hit Collider");
             //moveRight = !moveRight;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("PlayerProjectile"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
 
     void OnHitWallEvent()
     {

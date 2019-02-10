@@ -19,6 +19,14 @@ public class PlayerProjectile : MonoBehaviour
         playerprojectile_rigidbody.velocity = new Vector2(0, speed);
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void OnBecameInvisible()
     {
         Destroy(gameObject);
