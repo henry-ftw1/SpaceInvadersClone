@@ -38,4 +38,13 @@ public class Player : MonoBehaviour
         Vector2 here = (Vector2)this.transform.position;
         Instantiate(player_projectile, here, Quaternion.identity);
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("EnemyProjectile"))
+        {
+            Destroy(gameObject);
+            --lives;
+        }
+    }
 }
