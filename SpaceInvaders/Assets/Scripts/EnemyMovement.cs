@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
     private float moveDown;
     private bool moveRight;
 
+    public GameObject enemy_projectile;
     public Rigidbody2D m_rb;
     private Vector2 m_position;
     EnemyMovement enemyComponent;
@@ -37,6 +38,11 @@ public class EnemyMovement : MonoBehaviour
     void Update()
     {
         Move();
+
+        if (!(GameObject.Find("EnemyProjectile(Clone)")))
+        {
+            shoot();
+        }
     }
 
     void Move()
@@ -55,7 +61,11 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-
+    void shoot()
+    {
+        Vector2 here = (Vector2)this.transform.position;
+        Instantiate(enemy_projectile, here, Quaternion.identity);
+    }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
