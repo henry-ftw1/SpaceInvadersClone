@@ -24,6 +24,10 @@ public class Player : MonoBehaviour
         {
             shoot();
         }
+        if (lives <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void move()
@@ -43,7 +47,6 @@ public class Player : MonoBehaviour
     {
         if (other.CompareTag("EnemyProjectile"))
         {
-            Destroy(gameObject);
             --lives;
         }
     }
