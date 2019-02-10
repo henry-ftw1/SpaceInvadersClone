@@ -27,6 +27,7 @@ public class Pause : MonoBehaviour
     {
         paused = false;
         menu.SetActive(false);
+        System.Threading.Thread.Sleep(100);
         Time.timeScale = 1f;
     }
 
