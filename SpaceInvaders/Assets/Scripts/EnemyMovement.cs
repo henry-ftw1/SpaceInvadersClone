@@ -10,6 +10,7 @@ public class EnemyMovement : MonoBehaviour
     private bool moveRight;
 
     public Rigidbody2D m_rb;
+    private Vector2 m_position;
     EnemyMovement enemyComponent;
 
     public delegate void hitWallDelegate();
@@ -23,20 +24,17 @@ public class EnemyMovement : MonoBehaviour
         moveDown = 0.1f;
         moveRight = true;
         m_rb = this.transform.GetComponent<Rigidbody2D>();
+        m_position = (Vector2)this.transform.position;
         enemyComponent = GameObject.Find("Enemy").GetComponent<EnemyMovement>();
         enemyComponent.hitWallEvent += OnHitWallEvent;
     }
     void Start()
     {
+        m_rb.velocity = new Vector2(moveSpeed, 0);
     }
 
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    Move();
-    //}
-
-    void FixedUpdate()
+    //Update is called once per frame
+    void Update()
     {
         Move();
     }
@@ -45,14 +43,15 @@ public class EnemyMovement : MonoBehaviour
     {
         if(moveRight)
         {
-            //m_rb.AddForce(Vector2.right);
-            this.transform.Translate(Vector2.right * Time.deltaTime * moveSpeed);
+            ////m_rb.AddForce(Vector2.right);
+            //this.transform.Translate(Vector2.right * Time.deltaTime * moveSpeed);
+            m_position = new Vector2(m_position.x + 1, 0);
         }
-            
         else
         {
-            //m_rb.AddForce(Vector2.left);
-            this.transform.Translate(Vector2.left * Time.deltaTime * moveSpeed);
+            ////m_rb.AddForce(Vector2.left);
+            //this.transform.Translate(Vector2.left * Time.deltaTime * moveSpeed);
+            m_position = new Vector2(m_position.x - 1, 0);
         }
     }
 
@@ -81,6 +80,9 @@ public class EnemyMovement : MonoBehaviour
     void OnHitWallEvent()
     {
         Debug.Log("Hit Wall Event Triggered");
-        this.moveRight = !this.moveRight;
+        moveRight = !moveRight;
+        moveSpeed = -moveSpeed;
+        m_rb.velocity = new Vector2(moveSpeed, 0);
+        this.transform.Translate(Vector2.down * moveDown);
     }
 }
