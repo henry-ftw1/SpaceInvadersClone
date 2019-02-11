@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public float moveSpeed;
+    private float moveSpeed;
     private float moveDown;
     public int points;
 
@@ -18,12 +18,12 @@ public class EnemyMovement : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        moveSpeed = 5f;
-        moveDown = 0.1f;
         points = 10;
     }
     void Start()
     {
+        moveSpeed = this.transform.parent.GetComponentInParent<EnemyGrid>().gridSpeed;
+        moveDown = this.transform.parent.GetComponentInParent<EnemyGrid>().gridDown;
         //m_rb.velocity = new Vector2(moveSpeed, 0);
         //this.transform.Translate(Vector2.right * Time.deltaTime * moveSpeed);
     }
@@ -32,10 +32,10 @@ public class EnemyMovement : MonoBehaviour
     void Update()
     {
         Move();
-        if (!(GameObject.Find("EnemyProjectile(Clone)")))
-        {
-            shoot();
-        }
+        //if (!(GameObject.Find("EnemyProjectile(Clone)")))
+        //{
+        //    shoot();
+        //}
     }
 
     public void Move()
@@ -55,7 +55,7 @@ public class EnemyMovement : MonoBehaviour
         this.transform.Translate(Vector2.down * moveDown);
     }
 
-    void shoot()
+    public void Shoot()
     {
         Vector2 here = (Vector2)this.transform.position;
         Instantiate(enemy_projectile, here, Quaternion.identity);
