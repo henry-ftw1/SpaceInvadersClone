@@ -15,24 +15,37 @@ public class EnemyGrid : MonoBehaviour
     //Go into each child and set their direction to move to the opposite direction if an event is triggered.
     void Start()
     {
-        int childCount = this.gameObject.transform.childCount;
-        for (int i = 0; i < childCount; i++)
+        int rowCount = this.gameObject.transform.childCount;
+        for (int i = 0; i < rowCount; i++)
         {
-            enemyComponent = this.gameObject.transform.GetChild(i).GetComponent<EnemyMovement>();
-            enemyComponent.hitWallEvent += OnHitWallEvent;
+            Transform rowI = this.gameObject.transform.GetChild(i);
+            for (int x = 0; x < this.gameObject.transform.GetChild(i).childCount; x++)
+            {
+                enemyComponent = rowI.GetChild(x).GetComponent<EnemyMovement>();
+                enemyComponent.hitWallEvent += OnHitWallEvent;
+            }
         }
     }
 
     void OnHitWallEvent()
     {
-        Debug.Log("Event Was Hit");
+        //Debug.Log("Event Was Hit");
         moveR = !moveR;
         int childCount = this.gameObject.transform.childCount;
         for (int i = 0; i < childCount; i++)
         {
-            EnemyMovement enemy = this.gameObject.transform.GetChild(i).GetComponent<EnemyMovement>();
-            enemy.MoveDown();
-            enemy.Move();
+            
+        }
+        int rowCount = this.gameObject.transform.childCount;
+        for (int i = 0; i < rowCount; i++)
+        {
+            Transform rowI = this.gameObject.transform.GetChild(i);
+            for (int x = 0; x < this.gameObject.transform.GetChild(i).childCount; x++)
+            {
+                EnemyMovement enemy = rowI.GetChild(x).GetComponent<EnemyMovement>();
+                enemy.MoveDown();
+                enemy.Move();
+            }
         }
     }
 }
