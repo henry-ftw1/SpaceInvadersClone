@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class EnemyGrid : MonoBehaviour
 {
@@ -12,7 +14,9 @@ public class EnemyGrid : MonoBehaviour
     public float gridSpeed;
     public float gridDown;
     public float shootPercent;
-    
+    public int score = 0;
+    public Text scoretext;
+
     List<Transform> enemyList;
 
     private void Awake()
@@ -28,6 +32,7 @@ public class EnemyGrid : MonoBehaviour
     //Go into each child and set their direction to move to the opposite direction if an event is triggered.
     void Start()
     {
+        scoretext.text = "Score: " + score.ToString();
         for (int i = 0; i < rowCount; i++)
         {
             Transform rowI = this.gameObject.transform.GetChild(i);
@@ -47,6 +52,10 @@ public class EnemyGrid : MonoBehaviour
     private void Update()
     {
         randomShoot();
+        if (score == 1100)
+        {
+            SceneManager.LoadScene("Win");
+        }
     }
 
     void OnHitWallEvent()
@@ -58,7 +67,7 @@ public class EnemyGrid : MonoBehaviour
             Transform rowI = this.gameObject.transform.GetChild(i);
             for (int x = 0; x < this.gameObject.transform.GetChild(i).childCount; x++)
             {
-                
+
                 EnemyMovement enemy = rowI.GetChild(x).GetComponent<EnemyMovement>();
                 enemy.MoveDown();
                 enemy.Move();
@@ -75,6 +84,8 @@ public class EnemyGrid : MonoBehaviour
             {
                 if (enemyList[i].name == name)
                 {
+                    score += enemyList[i].GetComponent<EnemyMovement>().points;
+                    scoretext.text = "Score: " + score.ToString();
                     Destroy(enemyList[i].gameObject);
                     enemyList[i] = null;
                 }
@@ -91,7 +102,7 @@ public class EnemyGrid : MonoBehaviour
             for (int i = 0; i < rowCount; i++)
             {
                 int indexNumber = (i * 11) + shootingColumn;
-                if(enemyList[indexNumber] != null)
+                if (enemyList[indexNumber] != null)
                 {
                     //if(indexNumber == 0)
                     //{

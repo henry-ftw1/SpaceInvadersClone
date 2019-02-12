@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -64,6 +65,10 @@ public class EnemyMovement : MonoBehaviour
         if (other.CompareTag("PlayerProjectile"))
         {
             DeathEvent(m_Name);
+        }
+        if (other.CompareTag("Bottom"))
+        {
+            SceneManager.LoadScene("Over");
         }
         if (other.CompareTag("Wall"))
             HitWallEvent();
