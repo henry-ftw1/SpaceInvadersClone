@@ -5,17 +5,24 @@ using UnityEngine;
 public class EnemyGrid : MonoBehaviour
 {
     EnemyMovement enemyComponent;
+    EnemyMovement enemyDeath;
+
     public bool moveR;
     private int rowCount;
     public float gridSpeed;
     public float gridDown;
+    public float shootPercent;
+    
+    List<Transform> enemyList;
 
     private void Awake()
     {
         moveR = true;
         rowCount = this.gameObject.transform.childCount;
-        gridSpeed = 5f;
-        gridDown = 0.1f;
+        gridSpeed = 2f;
+        gridDown = 0.05f;
+        shootPercent = 0.02f;
+        enemyList = new List<Transform>();
     }
 
     //Go into each child and set their direction to move to the opposite direction if an event is triggered.
@@ -27,14 +34,22 @@ public class EnemyGrid : MonoBehaviour
             for (int x = 0; x < this.gameObject.transform.GetChild(i).childCount; x++)
             {
                 enemyComponent = rowI.GetChild(x).GetComponent<EnemyMovement>();
-                enemyComponent.hitWallEvent += OnHitWallEvent;
+                enemyComponent.HitWallEvent += OnHitWallEvent;
+
+                enemyDeath = rowI.GetChild(x).GetComponent<EnemyMovement>();
+                enemyDeath.deathEvent += OnDeathEvent;
+                enemyList.Add(rowI.GetChild(x).transform);
             }
         }
     }
 
     private void LateUpdate()
     {
-        //randomShot();
+        //if (!GameObject.Find("EnemyProjectile(Clone)"))
+        //{
+        //    randomShoot();
+        //}
+        randomShoot();
     }
 
     void OnHitWallEvent()
@@ -54,20 +69,37 @@ public class EnemyGrid : MonoBehaviour
         }
     }
 
-    //void randomShot()
-    //{
-    //    float shouldShoot = Random.value;
-    //    if(shouldShoot >= 0.99)
-    //    {
-    //        int shootingColumn = Random.Range(1, 12);
+    void OnDeathEvent(string name)
+    {
+        //Transform deadEnemy = this.transform.Find(name);
+        //if (enemyList.Contains(deadEnemy))
+        //{
+        //    int index = enemyList.FindIndex();
+        //    Destroy(enemyList[index].gameObject);
+        //}
 
-    //        for (int i = 0; i < rowCount; i++)
-    //        {
-    //            Transform rowI = this.gameObject.transform.GetChild(i);
-    //            //if rowI(@shootingColumn) has an enemy, make it shoot or else move onto the next row
-    //            //if row is empty then choose another shooting column
-    //        }
+    }
 
-    //    }
-    //}
+    void randomShoot()
+    {
+        float shouldShoot = Random.value;
+        if (shouldShoot <= shootPercent)
+        {
+            int shootingColumn = Random.Range(0, 11);
+            for (int i = 0; i < rowCount; i++)
+            {
+                int indexNumber = (i * 11) + shootingColumn;
+                if(enemyList[indexNumber] != null)
+                {
+                    //if(indexNumber == 0)
+                    //{
+                    //    Debug.LogFormat("Enemy #{0} shot", indexNumber);
+                    //    Destroy(enemyList[indexNumber].gameObject);
+                    //}
+                    enemyList[indexNumber].GetComponent<EnemyMovement>().Shoot();
+                    return;
+                }
+            }
+        }
+    }
 }
