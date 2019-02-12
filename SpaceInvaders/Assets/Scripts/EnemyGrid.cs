@@ -37,18 +37,15 @@ public class EnemyGrid : MonoBehaviour
                 enemyComponent.HitWallEvent += OnHitWallEvent;
 
                 enemyDeath = rowI.GetChild(x).GetComponent<EnemyMovement>();
-                enemyDeath.deathEvent += OnDeathEvent;
+                enemyDeath.DeathEvent += OnDeathEvent;
+
                 enemyList.Add(rowI.GetChild(x).transform);
             }
         }
     }
 
-    private void LateUpdate()
+    private void Update()
     {
-        //if (!GameObject.Find("EnemyProjectile(Clone)"))
-        //{
-        //    randomShoot();
-        //}
         randomShoot();
     }
 
@@ -71,13 +68,18 @@ public class EnemyGrid : MonoBehaviour
 
     void OnDeathEvent(string name)
     {
-        //Transform deadEnemy = this.transform.Find(name);
-        //if (enemyList.Contains(deadEnemy))
-        //{
-        //    int index = enemyList.FindIndex();
-        //    Destroy(enemyList[index].gameObject);
-        //}
-
+        int eCount = enemyList.Count;
+        for (int i = 0; i < eCount; i++)
+        {
+            if (enemyList[i] != null)
+            {
+                if (enemyList[i].name == name)
+                {
+                    Destroy(enemyList[i].gameObject);
+                    enemyList[i] = null;
+                }
+            }
+        }
     }
 
     void randomShoot()
